@@ -1,6 +1,8 @@
 # SGN: Symbolic Graph Neural Network for Robust PDE Discovery
 
-This repository is the official implementation of the paper: **"SGN: A symbolic graph neural network for robust PDE discovery from noisy and sparse data."**
+[![arXiv](https://img.shields.io/badge/arXiv-2603.22380-b31b1b.svg)](https://arxiv.org/abs/2603.22380)
+
+This repository is the official implementation of the paper: **"[Symbolic Graph Networks for Robust PDE Discovery from Noisy Sparse Data](https://arxiv.org/abs/2603.22380)"**.
 
 **SGN** is a **Neuro-Symbolic AI** framework designed to extract underlying governing partial differential equations (PDEs) from noisy and sparse simulation data. By combining the representation power of **Graph Neural Networks (GNNs)** with the explicit formula extraction capabilities of **Symbolic Regression (PySR)**, SGN transforms "black-box" neural models into human-readable physical laws.
 
@@ -103,3 +105,18 @@ Run `visualization.py` to generate comparison plots, including:
 * **Error Map**: Spatial-temporal distribution of prediction errors.
 
 ---
+
+## 📚 Citation
+If you find this work useful in your research, please consider citing our paper:
+
+```bash
+@misc{chen2026symbolicgraphnetworksrobust,
+      title={Symbolic Graph Networks for Robust PDE Discovery from Noisy Sparse Data}, 
+      author={Xingyu Chen and Junxiu An and Jun Guo and Yuqian Zhou},
+      year={2026},
+      eprint={2603.22380},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={[https://arxiv.org/abs/2603.22380](https://arxiv.org/abs/2603.22380)}, 
+}
+```
