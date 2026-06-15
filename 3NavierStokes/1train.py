@@ -3,6 +3,14 @@
 #                    step1:用于训练模型                     #
 ############################################################
 
+from pathlib import Path
+import sys
+
+# 将项目根目录（上一层）加入导入路径
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+
 import model
 import numpy as np
 from model import PGN

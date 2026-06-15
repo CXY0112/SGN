@@ -1,0 +1,155 @@
+# SGN: Symbolic Graph Neural Network for Robust PDE Discovery
+
+[![arXiv](https://img.shields.io/badge/arXiv-2603.22380-b31b1b.svg)](https://arxiv.org/abs/2603.22380)
+
+This repository is the official implementation of the paper: **"[Symbolic Graph Networks for Robust PDE Discovery from Noisy Sparse Data](https://arxiv.org/abs/2603.22380)"**.
+
+**SGN** is a **Neuro-Symbolic AI** framework designed to extract underlying governing partial differential equations (PDEs) from noisy and sparse simulation data. By combining the representation power of **Graph Neural Networks (GNNs)** with the explicit formula extraction capabilities of **Symbolic Regression (PySR)**, SGN transforms "black-box" neural models into human-readable physical description.
+
+## 🌟 Key Features
+
+* **Paper Replication**: Full implementation of the SGN framework, supporting end-to-end discovery from raw data to analytical equations.
+* **High Robustness**: Built-in Savitzky-Golay (S-G) filters and noise injection mechanisms ensure high accuracy in formula discovery even under **0.1% - 10% Gaussian noise**.
+* **Multi-Physics Support**:
+* **Wave Equation**: Discovery of scalar field dynamics.
+* **Convection-Diffusion Equation**: Modeling of transport phenomena.
+* **Navier-Stokes Equations**: Modeling of complex vector fields (velocity fields).
+
+
+* **Full Interpretability**: The final output consists of mathematical formulas rather than neural weights, allowing for direct scientific analysis and verification.
+
+---
+
+## 📂 Project Structure
+
+```text
+.
+├── add_noise.py                # Data Augmentation: Generates datasets with various noise levels
+├── config.py                   # Global Configuration: Hyperparameters, data paths, etc.
+├── CHANGELOG.md                # Project update history
+├── model.py                    # Core Architecture: Defines the Physics Graph Network (PGN)
+├── simulate.py                 # Data Generation: Simulates physical processes to generate .npz data
+├── tool.py                     # Utility Library: Feature engineering, visualization, noise estimation
+├── requirement.txt             # Python dependencies
+│
+├── 1wave/                      # Experimental module for Wave Equation
+├── 2Convection_Diffusion/      # Experimental module for Convection-Diffusion
+├── 3NavierStokes/              # Experimental module for Navier-Stokes
+│   ├── 1train.py               # Step 1: Train GNN to learn dynamical features
+│   ├── 2predict.py             # Step 2: Validate fitting accuracy and autoregressive rollout
+│   ├── 3pySR_sulamte.py        # Step 3: Extract explicit physical formulas via PySR
+│   ├── 4test.py                # Step 4: Construct and verify the pure Symbolic Graph Solver
+│   └── visualization.py        # Visual analysis of experimental results
+│
+├── data/                       # Dataset directory: Stores simulation data and results
+└── result/                     # Results directory: Stores extracted formulas (.csv) and weights (.pth)
+
+```
+
+---
+
+## 🛠️ Installation
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/CXY0112/SGN.git
+cd SGN
+
+```
+
+### 2. Environment Setup
+
+Python 3.8+ is required. We recommend using a virtual environment:
+
+```bash
+pip install -r requirement.txt
+
+```
+
+### 3. Julia & PySR Setup
+
+Since the symbolic regression engine `PySR` relies on the Julia language, please ensure Julia is installed on your system:
+
+1. **Install Julia**: Download from the [Official Julia Website](https://julialang.org/downloads/) (v1.9 or higher is recommended).
+2. **Configure Path**: Ensure the `julia` command is accessible in your system terminal.
+3. **Initialize PySR**: Run the following in Python to link the libraries:
+```python
+import pysr
+pysr.install()
+
+```
+
+
+
+---
+
+## 🚀 Execution Workflow
+
+**Note**: Keep experiment scripts in their original subfolders. Each script automatically adds the project root to Python's module search path, so it can import `model.py`, `config.py`, and `tool.py` without moving files.
+
+Run scripts from the project root, for example:
+
+```bash
+python 1wave/1train.py
+python 2Convection_Diffusion/2predict.py
+python 3NavierStokes/4test.py
+```
+
+### Core Steps:
+
+1. **Network Training (`1train.py`)**: Starts GNN training where the PGN learns the interaction logic between nodes.
+2. **Fitting Validation (`2predict.py`)**: Uses autoregressive prediction to check if the GNN has captured the true physical evolution patterns.
+3. **Symbolic Extraction (`3pySR_sulamte.py`)**: The critical step. Performs symbolic fitting on the GNN’s message passing and node update functions to convert weights into analytical formulas.
+4. **Final Test (`4test.py`)**: Embeds the discovered formulas into the `CustomMsgFn` and `CustomNodeFn` classes to test the accuracy of a pure Symbolic Solver.
+
+---
+
+## 📊 Results & Visualization
+
+Run `visualization.py` to generate comparison plots, including:
+
+* **Ground Truth**: The actual physical field evolution.
+* **SGN Prediction**: Rollout generated by the symbolic formula-driven graph solver.
+* **Error Map**: Spatial-temporal distribution of prediction errors.
+
+---
+
+## Change Log
+
+### 2026-06-15
+
+- Updated all Python scripts in `1wave/`, `2Convection_Diffusion/`, and `3NavierStokes/` to locate the project root from `__file__`.
+- Added `Path` and `sys` imports, then inserted the project root into `sys.path` before importing root-level modules:
+
+```python
+from pathlib import Path
+import sys
+
+ROOT_DIR = Path(__file__).resolve().parent.parent
+if str(ROOT_DIR) not in sys.path:
+    sys.path.insert(0, str(ROOT_DIR))
+```
+
+- Scripts can now import `model.py`, `config.py`, and `tool.py` while remaining in their experiment subfolders.
+- Removed the previous requirement to move experiment scripts into the project root.
+- Added direct execution examples for scripts under each experiment directory.
+
+See [`CHANGELOG.md`](CHANGELOG.md) for the complete update history.
+
+---
+
+## 📚 Citation
+If you find this work useful in your research, please consider citing our paper:
+
+```bash
+@misc{chen2026symbolicgraphnetworksrobust,
+      title={Symbolic Graph Networks for Robust PDE Discovery from Noisy Sparse Data}, 
+      author={Xingyu Chen and Junxiu An and Jun Guo and Yuqian Zhou},
+      year={2026},
+      eprint={2603.22380},
+      archivePrefix={arXiv},
+      primaryClass={cs.LG},
+      url={[https://arxiv.org/abs/2603.22380](https://arxiv.org/abs/2603.22380)}, 
+}
+```
